@@ -54,7 +54,7 @@ module.exports = function(grunt) {
 				page = grunt.file.read(dest);
 				start = page.indexOf(options.startTag);
 
-				end = page.indexOf(options.endTag);
+				end = page.indexOf(options.endTag, start);
 				if (start === -1 || end === -1 || start >= end) {
 					return;
 				} else {
