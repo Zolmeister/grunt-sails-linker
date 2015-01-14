@@ -47,7 +47,12 @@ module.exports = function(grunt) {
 					if (options.relative) {
 						filepath = filepath.replace(/^\//,'');
 					}
-					return util.format(options.fileTmpl, filepath);
+
+					if (options.fileTmplFn) {
+						return options.fileTmplFn(filepath);
+					} else {
+						return util.format(options.fileTmpl, filepath);
+					}
 				});
 
 			grunt.file.expand({}, f.dest).forEach(function(dest){
