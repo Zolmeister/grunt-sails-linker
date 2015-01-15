@@ -48,8 +48,8 @@ module.exports = function(grunt) {
 						filepath = filepath.replace(/^\//,'');
 					}
 
-					if (options.fileTmplFn) {
-						return options.fileTmplFn(filepath);
+					if (options.fileRef) {
+						return options.fileRef(filepath);
 					} else {
 						return util.format(options.fileTmpl, filepath);
 					}
