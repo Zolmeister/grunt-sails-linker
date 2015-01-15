@@ -65,7 +65,7 @@ The template used to insert the reference to the script files.
 Type: `Function`
 Default value: `undefined`
 
-Optional function which takes the `filepath` as argument and returns a `String` inserted as reference to the script files. Note that `option.fileRef` takes precedence over `option.fileTmpl`.
+Optional function which takes the `filepath` as argument and returns a `String` inserted as reference to the script file. Note that `option.fileRef` takes precedence over `option.fileTmpl`.
 
 #### options.appRoot
 Type: `String`
