@@ -41,7 +41,6 @@ module.exports = function(grunt) {
 
 			var ignoreFile = false;
 			options.ignore.forEach(function (ignoreStatement) {
-				console.log(preppedFilePath, ignoreStatement);
 				if (minimatch(preppedFilePath, ignoreStatement)) {
 					ignoreFile = true;
 					grunt.log.debug('Skipping \'' + filepath + '\' due to an ignore statement (' + ignoreStatement + ')');
