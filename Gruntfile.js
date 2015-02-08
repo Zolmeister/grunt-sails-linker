@@ -37,10 +37,10 @@ module.exports = function(grunt) {
           startTag: '<!--SCRIPTS-->',
           endTag: '<!--SCRIPTS END-->',
           fileTmpl: '<script src="%s"></script>',
-          appRoot: 'test/'
+          appRoot: 'test/',
         },
         files: {
-          'test/fixtures/**/*.html': 'test/fixtures/*.js'
+          'test/fixtures/file.html': 'test/fixtures/*.js'
         }
       },
       fileRef_options: {
@@ -54,7 +54,22 @@ module.exports = function(grunt) {
           appRoot: 'test/'
         },
         files: {
-          'test/fixtures/**/*.html': 'test/fixtures/*.js'
+          'test/fixtures/file.html': 'test/fixtures/*.js'
+        }
+      },
+      ignore_options: {
+        options: {
+          startTag: '<!--SCRIPTS-->',
+          endTag: '<!--SCRIPTS END-->',
+          fileRef: function (filepath) {
+            var tmpl = '<script src="%s"></script>';
+            return util.format(tmpl, filepath);
+          },
+          appRoot: 'test/',
+          ignore: ['fixtures/forever-ignored.js']
+        },
+        files: {
+          'test/fixtures/ignore_options.html': 'test/fixtures/*.js'
         }
       }
     },
@@ -76,7 +91,13 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'sails-linker:default_options', 'nodeunit']);
+  grunt.registerTask('test', [
+    'clean',
+    'sails-linker:default_options',
+    'sails-linker:fileRef_options',
+    'sails-linker:ignore_options',
+    'nodeunit'
+  ]);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
