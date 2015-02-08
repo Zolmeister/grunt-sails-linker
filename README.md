@@ -1,4 +1,7 @@
-# grunt-sails-linker
+# DEPRECATED
+# see https://github.com/mikermcneil/grunt-sails-linker
+
+### grunt-sails-linker
 
 > Autoinsert script tags (or other filebased tags) in an html file
 
