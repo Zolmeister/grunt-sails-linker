@@ -9,6 +9,7 @@
 'use strict';
 
 var util = require('util');
+var minimatch = require('minimatch');
 
 module.exports = function(grunt) {
 
@@ -22,9 +23,33 @@ module.exports = function(grunt) {
 			endTag: '<!--SCRIPTS END-->',
 			fileTmpl: '<script src="%s"></script>',
 			appRoot: '',
-			relative: false
+			relative: false,
+			ignore: []
 		});
 
+		var fileShouldBeIgnored = function (filepath, options) {
+			// Warn on and remove invalid source files (if nonull was set).
+			if (!grunt.file.exists(filepath)) {
+				grunt.log.warn('Source file "' + filepath + '" not found.');
+				return true;
+			}
+
+			var preppedFilePath = filepath.replace(options.appRoot, '');
+			if (!options.relative) {
+				preppedFilePath = preppedFilePath.replace(/^\//, '');
+			}
+
+			var ignoreFile = false;
+			options.ignore.forEach(function (ignoreStatement) {
+				console.log(preppedFilePath, ignoreStatement);
+				if (minimatch(preppedFilePath, ignoreStatement)) {
+					ignoreFile = true;
+					grunt.log.debug('Skipping \'' + filepath + '\' due to an ignore statement (' + ignoreStatement + ')');
+				}
+			});
+
+			return ignoreFile;
+		};
 
 		// Iterate over all specified file groups.
 		this.files.forEach(function (f) {
@@ -36,11 +61,7 @@ module.exports = function(grunt) {
 
 			// Create string tags
 			scripts = f.src.filter(function (filepath) {
-					// Warn on and remove invalid source files (if nonull was set).
-					if (!grunt.file.exists(filepath)) {
-						grunt.log.warn('Source file "' + filepath + '" not found.');
-						return false;
-					} else { return true; }
+					return !fileShouldBeIgnored(filepath, options);
 				}).map(function (filepath) {
 					filepath = filepath.replace(options.appRoot, '');
 					// If "relative" option is set, remove initial forward slash from file path
@@ -77,5 +98,4 @@ module.exports = function(grunt) {
 			});
 		});
 	});
-
 };
