@@ -23,26 +23,35 @@ var grunt = require('grunt');
 */
 
 exports.scriptlinker = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
-  },
-  default_options: function(test) {
-    test.expect(1);
+    setUp: function(done) {
+        // setup here if necessary
+        done();
+    },
+    default_options: function(test) {
+        test.expect(1);
 
-    var actual = grunt.file.read('test/fixtures/file.html');
-    var expected = grunt.file.read('test/expected/file.html');
-    test.equal(actual, expected, 'should insert the available files in the file.');
+        var actual = grunt.file.read('test/fixtures/file.html');
+        var expected = grunt.file.read('test/expected/file.html');
+        test.equal(actual, expected, 'should insert the available files in the file.');
 
-    test.done();
-  },
-  fileRef_options: function(test) {
-    test.expect(1);
+        test.done();
+    },
+    fileRef_options: function(test) {
+        test.expect(1);
 
-    var actual = grunt.file.read('test/fixtures/file.html');
-    var expected = grunt.file.read('test/expected/file.html');
-    test.equal(actual, expected, 'should insert the available files in the file using the fileRef option.');
+        var actual = grunt.file.read('test/fixtures/file.html');
+        var expected = grunt.file.read('test/expected/file.html');
+        test.equal(actual, expected, 'should insert the available files in the file using the fileRef option.');
 
-    test.done();
-  }
+        test.done();
+    },
+    ignore_options: function(test) {
+        test.expect(1);
+
+        var actual = grunt.file.read('test/fixtures/ignore_options.html');
+        var expected = grunt.file.read('test/expected/ignore_options.html');
+        test.equal(actual, expected, 'should insert all available files except the ignored one, forever-ignored.js.');
+
+        test.done();
+    }
 };
