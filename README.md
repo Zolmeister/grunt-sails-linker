@@ -79,3 +79,8 @@ Default value: `false`
 
 Reference files using a relative url.
 
+#### options.ignore
+Type: `Array[String]`
+Default value: `[]`
+
+Ignore files relative to the appRoot. Globbing patterns is allowed here, see [minimatch](https://www.npmjs.com/package/minimatch) for more details.
