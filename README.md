@@ -1,14 +1,11 @@
-# DEPRECATED
-# see https://github.com/mikermcneil/grunt-sails-linker
-
-### grunt-sails-linker
+# grunt-sails-linker
 
 > Autoinsert script tags (or other filebased tags) in an html file
 
-## Getting Started
-This plugin requires Grunt `~0.4.x`
+## Getting started
+This plugin requires Grunt `~0.4.x` or `^1.0.0`.
 
-When the task is run the destination file(s) is updated with script tags pointing to all the source files. The reason this plugin was built was to automate the process of inserting script tags when building large web apps.
+When the task is run, the destination file(s) is updated with script tags pointing to all the source files. The reason this plugin was built was to automate the process of inserting script tags when building large web apps.
 
 ```shell
 npm install grunt-sails-linker --save-dev
@@ -88,3 +85,10 @@ Default value: `false`
 
 Pass the contents of a file rather than the filepath into `fileTmpl`.  For example, if `options.inline` is set to `true` and `fileTmpl` is set to `<script>%s</script>`, the script contents will be injected between `<script>` tags.
 
+
+## License 
+
+Copyright &copy; 2013 [Scott Laursen](http://github.com/scott-laursen)
+Copyright &copy; 2013 [Zoli Kahan](http://github.com/Zolmeister)
+
+The [Sails framework](http://sailsjs.com) is free and open-source under the [MIT License](http://sailsjs.com/license).

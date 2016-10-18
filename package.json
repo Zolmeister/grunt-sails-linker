@@ -1,15 +1,16 @@
 {
   "name": "grunt-sails-linker",
-  "description": "Autoinsert script tags in an html file",
+  "description": "Autoinsert <script> and <link> tags in an html file.",
   "version": "0.10.1",
-  "homepage": "https://github.com/mikermcneil/grunt-sails-linker",
+  "homepage": "http://sailsjs.com",
   "contributors": [
+    "Mike McNeil <michael.r.mcneil@gmail.com> (http://mikermcneil.com)",
     "Zolmeister <zolikahan@gmail.com> (http://zolmeister.com)",
     "scott-laursen <thomas@addgo.com> (www.addgo.com)"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mikermcneil/grunt-sails-linker.git"
+    "url": "https://github.com/sailsjs/grunt-sails-linker.git"
   },
   "main": "Gruntfile.js",
   "engines": {
@@ -28,7 +29,6 @@
     "gruntplugin"
   ],
   "readmeFilename": "README.md",
-  "gitHead": "efb0eaaf4e518cc5ff646955a2e03b91ac8b70fb",
   "directories": {
     "test": "test"
   },
