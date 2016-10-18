@@ -22,7 +22,8 @@ module.exports = function(grunt) {
 			endTag: '<!--SCRIPTS END-->',
 			fileTmpl: '<script src="%s"></script>',
 			appRoot: '',
-			relative: false
+			relative: false,
+			inline: false
 		});
 
 
@@ -42,6 +43,10 @@ module.exports = function(grunt) {
 						return false;
 					} else { return true; }
 				}).map(function (filepath) {
+					if (options.inline) {
+						var contents = grunt.file.read(filepath);
+						return util.format(options.fileTmpl, contents);
+					}
 					filepath = filepath.replace(options.appRoot, '');
 					// If "relative" option is set, remove initial forward slash from file path
 					if (options.relative) {
@@ -69,7 +74,6 @@ module.exports = function(grunt) {
 						padding += page.charAt(ind);
 						ind -= 1;
 					}
-					console.log('padding length', padding.length);
 					newPage = page.substr(0, start + options.startTag.length) + grunt.util.linefeed + padding + scripts.join(grunt.util.linefeed + padding) + grunt.util.linefeed + padding + page.substr(end);
 					// Insert the scripts
 					grunt.file.write(dest, newPage);

@@ -82,3 +82,9 @@ Default value: `false`
 
 Reference files using a relative url.
 
+#### options.inline
+Type: `Boolean`
+Default value: `false`
+
+Pass the contents of a file rather than the filepath into `fileTmpl`.  For example, if `options.inline` is set to `true` and `fileTmpl` is set to `<script>%s</script>`, the script contents will be injected between `<script>` tags.
+
