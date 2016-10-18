@@ -3,6 +3,8 @@
  * https://github.com/scott-laursen/grunt-scriptlinker
  *
  * Copyright (c) 2013 scott-laursen
+ * Copyright (c) 2013 Zoli Kahan
+ * Copyright (c) 2014 Mike McNeil
  * Licensed under the MIT license.
  */
 

@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "homepage": "http://sailsjs.com",
   "contributors": [
-    "Mike McNeil <michael.r.mcneil@gmail.com> (http://mikermcneil.com)",
-    "Zolmeister <zolikahan@gmail.com> (http://zolmeister.com)",
-    "scott-laursen <thomas@addgo.com> (www.addgo.com)"
+    "Mike McNeil (http://mikermcneil.com)",
+    "Zolmeister (http://zolmeister.com)",
+    "scott-laursen (www.addgo.com)"
   ],
   "repository": {
     "type": "git",
@@ -26,11 +26,9 @@
     "grunt": "0.4.5"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "sails",
+    "linker"
   ],
-  "readmeFilename": "README.md",
-  "directories": {
-    "test": "test"
-  },
   "license": "MIT"
 }
