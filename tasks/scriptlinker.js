@@ -47,6 +47,7 @@ module.exports = function(grunt) {
 					if (options.relative) {
 						filepath = filepath.replace(/^\//,'');
 					}
+					filepath = (options.prefix||'') + filepath;
 					if (options.fileRef) {
 						return options.fileRef(filepath);
 					} else {
