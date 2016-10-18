@@ -1,7 +1,7 @@
 {
   "name": "grunt-sails-linker",
   "description": "Autoinsert <script> and <link> tags in an html file.",
-  "version": "0.10.1",
+  "version": "1.0.0",
   "homepage": "http://sailsjs.com",
   "contributors": [
     "Mike McNeil <michael.r.mcneil@gmail.com> (http://mikermcneil.com)",
