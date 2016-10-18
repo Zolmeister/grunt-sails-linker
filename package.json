@@ -1,6 +1,6 @@
 {
   "name": "grunt-sails-linker",
-  "description": "Autoinsert <script> and <link> tags in an html file.",
+  "description": "Autoinsert script and link tags in an html file.",
   "version": "1.0.1",
   "homepage": "http://sailsjs.com",
   "contributors": [
