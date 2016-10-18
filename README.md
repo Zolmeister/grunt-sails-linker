@@ -91,7 +91,7 @@ Pass the contents of a file rather than the filepath into `fileTmpl`.  For examp
 First, please check out the relevant documentation in [Concepts > Assets](http://sailsjs.com/docs/concepts/assets).  If you have further questions or are having trouble, click [here](http://sailsjs.com/support).
 
 
-## Bugs &nbsp; [![NPM version](https://badge.fury.io/js/sails-generate.svg)](http://npmjs.com/package/sails-generate)
+## Bugs &nbsp; [![NPM version](https://badge.fury.io/js/grunt-sails-linker.svg)](http://npmjs.com/package/grunt-sails-linker)
 
 To report a bug, [click here](http://sailsjs.com/bugs).
 
@@ -100,7 +100,7 @@ To report a bug, [click here](http://sailsjs.com/bugs).
 
 Please observe the guidelines and conventions laid out in the [Sails project contribution guide](http://sailsjs.com/contribute) when opening issues or submitting pull requests.
 
-[![NPM](https://nodei.co/npm/sails-generate.png?downloads=true)](http://npmjs.com/package/sails-generate)
+[![NPM](https://nodei.co/npm/grunt-sails-linker.png?downloads=true)](http://npmjs.com/package/grunt-sails-linker)
 
 
 ## License
