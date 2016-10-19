@@ -18,3 +18,5 @@ CONTRIBUTING.md
 *.md
 **/*.md
 .github
+test/
+examples/
