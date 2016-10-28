@@ -38,11 +38,13 @@ module.exports = function(grunt) {
         options: {
           startTag: '<!--SCRIPTS-->',
           endTag: '<!--SCRIPTS END-->',
-          fileTmpl: '<script src="%s"></script>',
+          fileTmpl: '<script src="%s" type="%s"></script>',
           appRoot: 'test/'
         },
         files: {
-          'test/fixtures/**/*.html': 'test/fixtures/*.js'
+  //        'test1/fixtures/**/*.html': 'test/fixtures/*.js',
+  //        'test2/fixtures/**/*.html': ['test/fixtures/*.js'],
+          'test/fixtures/**/*.html' : require('./test/fixtures/complexTest').jsFilesToInject
         }
       },
       fileRef_options: {
@@ -56,7 +58,7 @@ module.exports = function(grunt) {
           appRoot: 'test/'
         },
         files: {
-          'test/fixtures/**/*.html': 'test/fixtures/*.js'
+         'test/fixtures/**/*.html' : require('./test/fixtures/complexTest').jsFilesToInject
         }
       }
     },

@@ -8,9 +8,9 @@
  * Licensed under the MIT license.
  */
 
-'use strict';
 
 var util = require('util');
+var glob = require('glob');
 
 module.exports = function(grunt) {
 
@@ -27,29 +27,54 @@ module.exports = function(grunt) {
 			relative: false,
 			inline: false
 		});
-
+		
 
 		// Iterate over all specified file groups.
 		this.files.forEach(function (f) {
-			var scripts,
+			var scripts = [],
+				i = 0,
 				page = '',
 				newPage = '',
 				start = -1,
-				end = -1;
-
+				end = -1
+				
+			
+			//f.src cannot be access | changed 
+			f.csrc = []
+				
 			// Create string tags
-			scripts = f.src.filter(function (filepath) {
-					// Warn on and remove invalid source files (if nonull was set).
-					if (!grunt.file.exists(filepath)) {
-						grunt.log.warn('Source file "' + filepath + '" not found.');
-						return false;
-					} else { return true; }
-				}).map(function (filepath) {
-					if (options.inline) {
-						var contents = grunt.file.read(filepath);
-						return util.format(options.fileTmpl, contents);
-					}
-					filepath = filepath.replace(options.appRoot, '');
+			for(i; i < f.orig.src.length; i++) {
+				var source = f.orig.src[i];
+				var srcFile = [];
+				var type = 'text/javascript';
+				var sourceFileVal;
+				if (typeof source === 'string') {
+					sourceFileVal = source;
+					srcFile = grunt.file.glob.sync(source)
+				} else {
+					sourceFileVal = source.src
+					srcFile = grunt.file.glob.sync(source.src)
+					type = (source.type === undefined) ? type : source.type;
+				}
+				if(srcFile.length === 0) {
+					grunt.log.warn('Source file "' + sourceFileVal + '" not found.')
+					continue;
+				} 
+				srcFile.map((src) => {
+					scripts.push({
+						'src' : src,
+						'type' : type 
+					});	
+				})
+			}
+
+			scripts = scripts.map((script) => {
+				var filepath = script.src;
+				if (options.inline) {
+					var contents = grunt.file.read(filepath);
+					return util.format(options.fileTmpl, contents, script.type);
+				}
+				filepath = filepath.replace(options.appRoot, '');
 					// If "relative" option is set, remove initial forward slash from file path
 					if (options.relative) {
 						filepath = filepath.replace(/^\//,'');
@@ -58,15 +83,17 @@ module.exports = function(grunt) {
 					if (options.fileRef) {
 						return options.fileRef(filepath);
 					} else {
-						return util.format(options.fileTmpl, filepath);
+						var t= util.format(options.fileTmpl, filepath, script.type);
+						return util.format(options.fileTmpl, filepath, script.type);
 					}
-				});
+			});
+
+		
 
 			grunt.file.expand({}, f.dest).forEach(function(dest){
 				page = grunt.file.read(dest);
 				start = page.indexOf(options.startTag);
 				end = page.indexOf(options.endTag, start);
-
 				if (start === -1 || end === -1 || start >= end) {
 					return;
 				} else {
@@ -83,6 +110,7 @@ module.exports = function(grunt) {
 				}
 			});
 		});
+		
 	});
 
 };
