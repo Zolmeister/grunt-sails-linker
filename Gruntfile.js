@@ -42,9 +42,18 @@ module.exports = function(grunt) {
           appRoot: 'test/'
         },
         files: {
-  //        'test1/fixtures/**/*.html': 'test/fixtures/*.js',
-  //        'test2/fixtures/**/*.html': ['test/fixtures/*.js'],
-          'test/fixtures/**/*.html' : require('./test/fixtures/complexTest').jsFilesToInject
+          'test/fixtures/**/file.html': 'test/fixtures/*.js'
+        }
+      },
+      moduleObject_options: {
+        options: {
+          startTag: '<!--SCRIPTS-->',
+          endTag: '<!--SCRIPTS END-->',
+          fileTmpl: '<script src="%s" type="%s"></script>',
+          appRoot: 'test/'
+        },
+        files: {
+          'test/fixtures/**/fileModuleObject.html' : require('./test/fixtures/complexTest').jsFilesToInject
         }
       },
       fileRef_options: {
@@ -58,7 +67,7 @@ module.exports = function(grunt) {
           appRoot: 'test/'
         },
         files: {
-         'test/fixtures/**/*.html' : require('./test/fixtures/complexTest').jsFilesToInject
+         'test/fixtures/**/file.html': 'test/fixtures/*.js'
         }
       }
     },
@@ -80,7 +89,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'sails-linker:default_options', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'sails-linker:default_options', 'sails-linker:moduleObject_options', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

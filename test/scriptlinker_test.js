@@ -44,5 +44,15 @@ exports.scriptlinker = {
     test.equal(actual, expected, 'should insert the available files in the file using the fileRef option.');
 
     test.done();
+  },
+
+  moduleObject_options: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('test/fixtures/fileModuleObject.html');
+    var expected = grunt.file.read('test/expected/fileModuleObject.html');
+    test.equal(actual, expected, 'should insert the available files in the file using the fileRef option.');
+
+    test.done();
   }
 };
