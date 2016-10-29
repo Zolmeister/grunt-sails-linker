@@ -53,7 +53,7 @@ module.exports = function(grunt) {
           appRoot: 'test/'
         },
         files: {
-          'test/fixtures/**/fileModuleObject.html' : require('./test/fixtures/complexTest').jsFilesToInject
+          'test/fixtures/**/scriptType.html' : require('./test/fixtures/complexTest').jsFilesToInject
         }
       },
       fileRef_options: {

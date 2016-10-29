@@ -28,7 +28,6 @@ module.exports = function(grunt) {
 			inline: false
 		});
 		
-
 		// Iterate over all specified file groups.
 		this.files.forEach(function (f) {
 			var scripts = [],
@@ -36,28 +35,25 @@ module.exports = function(grunt) {
 				page = '',
 				newPage = '',
 				start = -1,
-				end = -1
-				
-			
-			//f.src cannot be access | changed 
-			f.csrc = []
+				end = -1; 
+			f.csrc = [];
 				
 			// Create string tags
 			for(i; i < f.orig.src.length; i++) {
 				var source = f.orig.src[i];
 				var srcFile = [];
 				var type = 'text/javascript';
-				var sourceFileVal;
+				var sourceFile;
 				if (typeof source === 'string') {
-					sourceFileVal = source;
+					sourceFile = source;
 					srcFile = grunt.file.glob.sync(source)
 				} else {
-					sourceFileVal = source.src
+					sourceFile = source.src
 					srcFile = grunt.file.glob.sync(source.src)
 					type = (source.type === undefined) ? type : source.type;
 				}
 				if(srcFile.length === 0) {
-					grunt.log.warn('Source file "' + sourceFileVal + '" not found.')
+					grunt.log.warn('Source file "' + sourceFile + '" not found.')
 					continue;
 				} 
 				srcFile.map((src) => {
@@ -68,6 +64,7 @@ module.exports = function(grunt) {
 				})
 			}
 
+			// Create script tags
 			scripts = scripts.map((script) => {
 				var filepath = script.src;
 				if (options.inline) {
@@ -79,7 +76,7 @@ module.exports = function(grunt) {
 					if (options.relative) {
 						filepath = filepath.replace(/^\//,'');
 					}
-					filepath = (options.prefix||'') + filepath;
+					filepath = (options.prefix || '') + filepath;
 					if (options.fileRef) {
 						return options.fileRef(filepath);
 					} else {
@@ -88,8 +85,7 @@ module.exports = function(grunt) {
 					}
 			});
 
-		
-
+			// Insert into html
 			grunt.file.expand({}, f.dest).forEach(function(dest){
 				page = grunt.file.read(dest);
 				start = page.indexOf(options.startTag);
@@ -104,7 +100,6 @@ module.exports = function(grunt) {
 						ind -= 1;
 					}
 					newPage = page.substr(0, start + options.startTag.length) + grunt.util.linefeed + padding + scripts.join(grunt.util.linefeed + padding) + grunt.util.linefeed + padding + page.substr(end);
-					// Insert the scripts
 					grunt.file.write(dest, newPage);
 					grunt.log.writeln('File "' + dest + '" updated.');
 				}

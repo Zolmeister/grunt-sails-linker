@@ -2,11 +2,7 @@
 
 var jsFilesToInject = [
    {
-    src: 'test/fixtures/regularInject/*.js',
-    environment: 'production',
-    headers: {
-      foo: 'bar'
-    }
+    src: 'test/fixtures/regularInject/*.js'
   },
   {
     src: 'test/fixtures/typeInject/*.js',
