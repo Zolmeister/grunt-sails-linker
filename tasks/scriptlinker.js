@@ -27,11 +27,29 @@ module.exports = function(grunt) {
 			relative: false,
 			inline: false
 		});
+
+		var scripts = [];
+		var self = this;	
+
+		// Adds script tags which are provided as an array
+		this.addArrayScriptTags = function(source) {
+			source.src.map((src) => {
+				srcFile = grunt.file.glob.sync(src);
+				if(srcFile.length === 0) {
+					grunt.log.warn('Source file "' + sourceFile + '" not found.')	
+				} 
+				srcFile.map((src) => {
+					scripts.push({
+						'src' : src,
+						'type' : source.type 
+					});	
+				});
+			});	
+		}
 		
 		// Iterate over all specified file groups.
 		this.files.forEach(function (f) {
-			var scripts = [],
-				i = 0,
+			var	i = 0,
 				page = '',
 				newPage = '',
 				start = -1,
@@ -48,10 +66,16 @@ module.exports = function(grunt) {
 					sourceFile = source;
 					srcFile = grunt.file.glob.sync(source)
 				} else {
-					sourceFile = source.src
-					srcFile = grunt.file.glob.sync(source.src)
-					type = (source.type === undefined) ? type : source.type;
+					if (Array.isArray(source.src)) {
+						self.addArrayScriptTags(source);
+						continue;
+					} else {
+						sourceFile = source.src
+						srcFile = grunt.file.glob.sync(source.src)
+					}
+					type = (source.type === undefined) ? type : source.type
 				}
+				
 				if(srcFile.length === 0) {
 					grunt.log.warn('Source file "' + sourceFile + '" not found.')
 					continue;
@@ -61,7 +85,7 @@ module.exports = function(grunt) {
 						'src' : src,
 						'type' : type 
 					});	
-				})
+				});
 			}
 
 			// Create script tags
