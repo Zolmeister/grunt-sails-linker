@@ -41,6 +41,52 @@ grunt.initConfig({
 })
 ```
 
+Grunt Sails linker also supports requiring node.js module files, which serve as configuration to handle more complex
+configurations and abitrary html attributes.
+
+```js
+grunt.initConfig({
+  'sails-linker': {
+    defaultOptions: {
+      options: {
+        startTag: '<!--SCRIPTS-->',
+        endTag: '<!--SCRIPTS END-->',
+        fileTmpl: '<script src="%s"></script>',
+        appRoot: 'app/'
+      },
+      files: {
+        // Target-specific file lists and/or options go here.
+        'app/index.html': ['app/scripts/config/config.js']
+      },
+    },
+  },
+})
+```
+
+*Config.js*
+
+```js
+var myconfig = [
+  {
+    src: 'path/to/all/*.js'
+  },
+  {
+    src: 'path/to/another/with/special/attributes/*.js',
+    attrName : 'foo',
+    attrValue : 'bar'
+  },
+  {
+    src: [
+      'path/one/myscript.js',
+      'path/two/nextscript*.js'
+    ],
+    attrName : 'type',
+    attrValue : 'script/babel'
+  }
+];
+module.exports.myconfig = myconfig;
+```
+
 ### Options
 
 #### options.startTag
@@ -109,3 +155,8 @@ Copyright &copy; 2013 [Scott Laursen](http://github.com/scott-laursen)
 Copyright &copy; 2013 [Zoli Kahan](http://github.com/Zolmeister)
 
 The [Sails framework](http://sailsjs.com) is free and open-source under the [MIT License](http://sailsjs.com/license).
+
+## FAQ
+
+- Does it also support injecting stylesheets?
+  Yes, it does. Just use the described `option` tags with `<!--SCRIPTS--><!--SCRIPTS END-->`.
