@@ -8,15 +8,14 @@
  * Licensed under the MIT license.
  */
 
-
-var util = require('util');
-var glob = require('glob');
+const util = require('util');
+const glob = require('glob');
+const _ = require('lodash');
 
 module.exports = function(grunt) {
 
 	// Please see the Grunt documentation for more information regarding task
 	// creation: http://gruntjs.com/creating-tasks
-
 	grunt.registerMultiTask('sails-linker', 'Autoinsert script tags in an html file.', function() {
 		// Merge task-specific and/or target-specific options with these defaults.
 		var options = this.options({
@@ -27,90 +26,142 @@ module.exports = function(grunt) {
 			relative: false,
 			inline: false
 		});
-
+		/** hold script src and html attributes */ 
 		var scripts = [];
-		var self = this;	
 
-		// Adds script tags which are provided as an array
+		/**
+		 * Iterate over the given config objects 
+		 * to build scripts[]
+		 */
+		this.createScriptTags = function(files) {
+			files.forEach((file) => {
+				if(_.isString(file)) {
+					this.addStringScriptTags(file);
+					return;
+				} else if(_.isString(file.src)) {
+					this.addStringScriptTags(file.src, file.attrName, file.attrValue);
+					return;
+				}
+				if(_.isArray(file) || _.isArray(file.src)) {
+					this.addArrayScriptTags(file);
+					return;
+				}
+			});
+		}
+		
+		/** 
+ 		*	Adds script tags when src is an array
+		* 	e.g 
+		* 	{
+		*		src: [
+		*			'path/to/abc.js',
+		*			'another/path/xyz.js'
+		*		],
+		*		attrName : 'type',
+		*		attrValue : 'text/javascript'
+		*	}
+		*/
 		this.addArrayScriptTags = function(source) {
 			source.src.map((src) => {
-				srcFile = grunt.file.glob.sync(src);
-				if(srcFile.length === 0) {
-					grunt.log.warn('Source file "' + sourceFile + '" not found.')	
-				} 
-				srcFile.map((src) => {
+				var file = grunt.file.glob.sync(src);
+				if(file.length === 0) {
+					grunt.log.warn('Source file "' + src + '" not found.');
+					return;
+				}
+				if(source.attrName === undefined) {
+					var defaultTypes = this.getDefaultValuesByFileType(file[0]);
+					source.attrName = defaultTypes.attrName;
+					source.attrValue = defaultTypes.attrValue;
+				}
+				file.map((src) => {
 					scripts.push({
 						'src' : src,
-						'type' : source.type 
+						'attrName' : source.attrName,
+						'attrValue' : source.attrValue 
 					});	
 				});
 			});	
 		}
+
+		/** 
+ 		*	Adds regular string like script tags
+		* 	e.g 
+		* 	'path/to/my.js',
+		*	attrName : 'foo',
+    	*	attrValue : 'bar'
+		*/
+		this.addStringScriptTags = function(source, attrName, attrValue){
+			var file = grunt.file.glob.sync(source);
+			var defaultTypes = {};
+			if(file.length === 0) {
+				grunt.log.warn('Source file "' + source + '" not found.')
+				return;
+			}
+			if(attrName === undefined || attrValue === undefined) {
+				defaultTypes = this.getDefaultValuesByFileType(file[0]);	
+			} else {
+				defaultTypes.attrName = attrName;
+				defaultTypes.attrValue = attrValue;
+			}
+			file.map((src) => {
+				scripts.push({
+					'src' : src,
+					'attrName' : defaultTypes.attrName,
+					'attrValue' : defaultTypes.attrValue
+				});	
+			});
+		}
 		
+		/**
+		*  Gets defauls html attributes depending on the file type
+		*/
+		this.getDefaultValuesByFileType = function(fileName) {
+			var retval = {};
+			var type = fileName.substr(fileName.lastIndexOf('.') + 1); 
+			retval.attrName = 'type';
+			if(type === 'js') {
+				retval.attrValue = "text/javascript";
+				return retval;
+			} 
+			if(type === 'css') {
+				retval.attrValue = "text/css";
+				return retval;
+			}
+		}
+
 		// Iterate over all specified file groups.
-		this.files.forEach(function (f) {
+		this.files.forEach((f) => {
 			var	i = 0,
 				page = '',
 				newPage = '',
 				start = -1,
 				end = -1; 
-			f.csrc = [];
-				
-			// Create string tags
-			for(i; i < f.orig.src.length; i++) {
-				var source = f.orig.src[i];
-				var srcFile = [];
-				var type = 'text/javascript';
-				var sourceFile;
-				if (typeof source === 'string') {
-					sourceFile = source;
-					srcFile = grunt.file.glob.sync(source)
-				} else {
-					if (Array.isArray(source.src)) {
-						self.addArrayScriptTags(source);
-						continue;
-					} else {
-						sourceFile = source.src
-						srcFile = grunt.file.glob.sync(source.src)
-					}
-					type = (source.type === undefined) ? type : source.type
-				}
-				
-				if(srcFile.length === 0) {
-					grunt.log.warn('Source file "' + sourceFile + '" not found.')
-					continue;
-				} 
-				srcFile.map((src) => {
-					scripts.push({
-						'src' : src,
-						'type' : type 
-					});	
-				});
-			}
+			f.csrc = [];	
+			this.createScriptTags(f.orig.src);
 
 			// Create script tags
 			scripts = scripts.map((script) => {
 				var filepath = script.src;
 				if (options.inline) {
 					var contents = grunt.file.read(filepath);
-					return util.format(options.fileTmpl, contents, script.type);
+					return util.format(options.fileTmpl, contents, script.attrName, script.attrValue);
 				}
 				filepath = filepath.replace(options.appRoot, '');
-					// If "relative" option is set, remove initial forward slash from file path
-					if (options.relative) {
-						filepath = filepath.replace(/^\//,'');
-					}
-					filepath = (options.prefix || '') + filepath;
-					if (options.fileRef) {
-						return options.fileRef(filepath);
-					} else {
-						var t= util.format(options.fileTmpl, filepath, script.type);
-						return util.format(options.fileTmpl, filepath, script.type);
-					}
+				// If "relative" option is set, remove initial forward slash from file path
+				if (options.relative) {
+					filepath = filepath.replace(/^\//,'');
+				}
+				filepath = (options.prefix || '') + filepath;
+				if (options.fileRef) {
+					return options.fileRef(filepath);
+				} else {
+					var t= util.format(options.fileTmpl, filepath, script.attrName, script.attrValue);
+					return util.format(options.fileTmpl, filepath, script.attrName, script.attrValue);
+				}
 			});
 
 			// Insert into html
-			grunt.file.expand({}, f.dest).forEach(function(dest){
+			grunt.file.expand({}, f.dest).forEach((dest) =>{
 				page = grunt.file.read(dest);
 				start = page.indexOf(options.startTag);
 				end = page.indexOf(options.endTag, start);
@@ -129,7 +180,6 @@ module.exports = function(grunt) {
 				}
 			});
 		});
-		
 	});
 
 };

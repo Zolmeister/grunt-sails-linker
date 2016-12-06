@@ -46,12 +46,12 @@ exports.scriptlinker = {
     test.done();
   },
 
-  moduleObject_options: function(test) {
+  htmlattributes_options: function(test) {
     test.expect(1);
 
     var actual = grunt.file.read('test/fixtures/scriptType.html');
     var expected = grunt.file.read('test/expected/scriptType.html');
-    test.equal(actual, expected, 'should insert the available files with the script type using moduleObject option.');
+    test.equal(actual, expected, 'should insert the available files with the script type using html attributes option.');
 
     test.done();
   }

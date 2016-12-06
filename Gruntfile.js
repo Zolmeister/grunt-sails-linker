@@ -38,22 +38,33 @@ module.exports = function(grunt) {
         options: {
           startTag: '<!--SCRIPTS-->',
           endTag: '<!--SCRIPTS END-->',
-          fileTmpl: '<script src="%s" type="%s"></script>',
+          fileTmpl: '<script src="%s" %s="%s"></script>',
           appRoot: 'test/'
         },
         files: {
           'test/fixtures/**/file.html': 'test/fixtures/*.js'
         }
       },
-      moduleObject_options: {
+      htmlattributes_options: {
         options: {
           startTag: '<!--SCRIPTS-->',
           endTag: '<!--SCRIPTS END-->',
-          fileTmpl: '<script src="%s" type="%s"></script>',
+          fileTmpl: '<script src="%s" %s="%s"></script>',
           appRoot: 'test/'
         },
         files: {
-          'test/fixtures/**/scriptType.html' : require('./test/fixtures/complexScripts').jsFilesToInject
+          'test/fixtures/**/scriptType.html' : require('./test/fixtures/config/complexScripts').jsFilesToInject
+        }
+      },
+      styles_options: {
+        options: {
+            startTag: '<!--STYLES-->',
+            endTag: '<!--STYLES END-->',
+            fileTmpl: '<link href="%s" %s="%s" rel="stylesheet">',
+            appRoot: 'test/'
+        },
+        files: {
+          'test/fixtures/**/styles.html': require('./test/fixtures/config/complexStyles').cssFilesToInject,
         }
       },
       fileRef_options: {
@@ -89,7 +100,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'sails-linker:default_options', 'sails-linker:moduleObject_options', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'sails-linker:default_options', 'sails-linker:htmlattributes_options', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
