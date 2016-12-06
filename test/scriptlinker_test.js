@@ -44,5 +44,15 @@ exports.scriptlinker = {
     test.equal(actual, expected, 'should insert the available files in the file using the fileRef option.');
 
     test.done();
+  },
+
+  htmlattributes_options: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('test/fixtures/scriptType.html');
+    var expected = grunt.file.read('test/expected/scriptType.html');
+    test.equal(actual, expected, 'should insert the available files with the script type using html attributes option.');
+
+    test.done();
   }
 };

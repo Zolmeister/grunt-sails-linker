@@ -24,6 +24,7 @@ npm-debug.log
 .tmp
 *.swo
 *.swp
+*.vscode
 *.swn
 *.swm
 .DS_STORE
